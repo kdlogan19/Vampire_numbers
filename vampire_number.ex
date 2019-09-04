@@ -2,12 +2,9 @@ defmodule VampireNumber do
   def main do
     {n1, _} = IO.gets("n1") |> Integer.parse
     {n2, _} = IO.gets("n2") |> Integer.parse
-    prev = System.monotonic_time()
     Enum.each(n1..n2, fn(n) ->
       do_stuff(n)
     end)
-    next = System.monotonic_time()
-    IO.puts next-prev
 
   end
 
