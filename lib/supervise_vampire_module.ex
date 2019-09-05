@@ -9,13 +9,11 @@ defmodule SuperviseVampireModule do
     
     n1 = Enum.at(range,0)
     n2 = Enum.at(range,1)
-    difference = n2 - n1
-    IO.puts difference
-    #work_list = for n <- range, fn(x) x -> 
-    #children = Enum.map([[100000,200000],[200000,300000]], fn(limit_num) ->
-    #  worker(VampireNumber, [limit_num], [id: limit_num, restart: :transient])
-    #end)
-    #supervise(children, strategy: :one_for_one)
+    work_list = Enum.chunk_every(n1..n2,10000)
+    children = Enum.map(work_list, fn(limit_num) ->
+      worker(VampireNumber, [limit_num], [id: limit_num, restart: :transient])
+    end)
+    supervise(children, strategy: :one_for_one)
   end
 end
 

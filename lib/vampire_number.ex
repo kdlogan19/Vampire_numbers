@@ -9,11 +9,14 @@ defmodule VampireNumber do
   end
 
   def main(number) do
-    n1 = Enum.at(number,0)
-    n2 = Enum.at(number,1)
+    #IO.inspect number
     IO.puts " PID = #{inspect self()}"
-    Enum.each(n1..n2, fn(n) ->
-      is_vampire(n)
+    #map = Enum.reduce (number, %{}, fn x, acc -> is_vampire(n)
+    Enum.each(number, fn(n) ->
+      result = is_vampire(n)
+      if(result != :nil) do
+        IO.puts(Enum.join(result, " ")) 
+      end
     end)
   end
 
@@ -29,9 +32,12 @@ defmodule VampireNumber do
   def get_factors(start_index,end_index,num,numSort) do
     fang_list = Enum.filter(start_index..end_index, fn(fang1) -> is_fang(num,fang1,numSort) end)
     if(fang_list != []) do
-      IO.write "#{num} "
-      Enum.each(fang_list, fn(x) -> IO.write "#{x} #{Kernel.trunc(num/x)} " end)
-      IO.puts ""
+      map = Enum.reduce(fang_list, [], fn x, acc ->
+        acc = acc ++ [x,Kernel.trunc(num/x)]
+      end)
+      [num,Enum.join(map, " ")]
+    else
+      :nil
     end
   end
 
