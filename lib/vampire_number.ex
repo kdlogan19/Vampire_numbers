@@ -9,13 +9,12 @@ defmodule VampireNumber do
   end
 
   def main(number) do
-    #IO.inspect number
-    IO.puts " PID = #{inspect self()}"
-    #map = Enum.reduce (number, %{}, fn x, acc -> is_vampire(n)
-    Enum.each(number, fn(n) ->
+    #IO.puts " PID = #{inspect self()}"
+    Enum.each(number, fn(n) -> 
       result = is_vampire(n)
       if(result != :nil) do
-        IO.puts(Enum.join(result, " ")) 
+        x = Enum.join(result, " ")
+        IO.puts(x) 
       end
     end)
   end
