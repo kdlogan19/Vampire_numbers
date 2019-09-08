@@ -1,4 +1,16 @@
 defmodule VampireNumber do
+  use GenServer
+
+  def start_link(range,parent_pid) do
+    GenServer.start_link(__MODULE__,[range,parent_pid],[])
+  end
+
+  def init(parameter) do
+    #call main function to get vampire number on range given by the parent node
+    main(Enum.at(parameter,0),Enum.at(parameter,1))
+    {:ok,[]}
+  end
+
   def main(number,parent_pid) do
     vamp_list = Enum.reduce(number,[], fn (n, acc) -> 
       digit_count = length(Integer.digits(n))
@@ -14,7 +26,7 @@ defmodule VampireNumber do
         acc
       end
     end)
-    
+    #Send Result back to the calling node
     send parent_pid, vamp_list
   end
 
