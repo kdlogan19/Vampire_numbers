@@ -1,22 +1,21 @@
 defmodule VampireNumber do
-  def start_link(number) do
-    pid = spawn_link(__MODULE__, :init, [number])
-    {:ok, pid}
-  end
-
-  def init(number) do
-    main(number)
-  end
-
-  def main(number) do
-    #IO.puts " PID = #{inspect self()}"
-    Enum.each(number, fn(n) -> 
-      result = is_vampire(n)
-      if(result != :nil) do
-        x = Enum.join(result, " ")
-        IO.puts(x) 
+  def main(number,parent_pid) do
+    vamp_list = Enum.reduce(number,[], fn (n, acc) -> 
+      digit_count = length(Integer.digits(n))
+      if(rem(digit_count, 2) == 0)do
+        result = is_vampire(n)
+        if(result != :nil) do
+          x = Enum.join(result, " ")
+          acc ++ [x]
+        else
+          acc
+        end
+      else 
+        acc
       end
     end)
+    
+    send parent_pid, vamp_list
   end
 
   def is_vampire(num) do
@@ -32,7 +31,7 @@ defmodule VampireNumber do
     fang_list = Enum.filter(start_index..end_index, fn(fang1) -> is_fang(num,fang1,numSort) end)
     if(fang_list != []) do
       map = Enum.reduce(fang_list, [], fn x, acc ->
-        acc = acc ++ [x,Kernel.trunc(num/x)]
+        acc ++ [x,Kernel.trunc(num/x)]
       end)
       [num,Enum.join(map, " ")]
     else

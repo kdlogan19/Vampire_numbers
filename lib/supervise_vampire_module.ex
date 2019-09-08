@@ -10,7 +10,7 @@ defmodule SuperviseVampireModule do
   def init(range) do
     n1 = Enum.at(range,0)
     n2 = Enum.at(range,1)
-    work_list = Enum.chunk_every(n1..n2,100000)
+    work_list = Enum.chunk_every(n1..n2,10000)
     children = Enum.map(work_list, fn(limit_num) ->
       worker(VampireNumber, [limit_num], [id: Enum.at(limit_num,0), restart: :transient])
     end)
